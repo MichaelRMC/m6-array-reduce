@@ -10,13 +10,16 @@ const hackedOrder = [20, -10, 3, -46, 7];
  * @returns {numbers[]} All values are numbers in an array
  * Must use map
  */
-const convertToNums = (order) =>
-	order.map((price) => {
-		if (isNaN(price)) {
-			price = price.substring(2);
+const convertToNums = ( order ) =>
+{
+	return order.map((currentValue) => {
+		if (isNaN(currentValue)) {
+			currentValue = currentValue.substring(2);
 		}
-		return parseFloat(price);
+		return parseFloat(currentValue);
 	});
+}
+	
 
 /**
  * Takes in an array of numbers and returns an array of all numbers multiplied by a conversion rate, by default 20.
@@ -25,8 +28,8 @@ const convertToNums = (order) =>
  * Must use map
  */
 
-const convertToDollars = (price, conversionRate = 20) => {
-	return price.map((price) => price * conversionRate);
+const convertToDollars = (prices, conversionRate = 20) => {
+	return prices.map((price) => price * conversionRate);
 };
 
 /**
@@ -35,10 +38,9 @@ const convertToDollars = (price, conversionRate = 20) => {
  * @returns {numbers[]} All values are numbers in an array
  * Must use reduce
  */
-const totalCart = ( price, shippingCost = 10 ) => price.reduce( ( sum, currentValue ) =>
-{
-  return sum + currentValue + shippingCost;
-});
+const totalCart = (prices, shipping = 10) => {
+	return prices.reduce((sum, cv) => sum + cv, shipping);
+};
 
 /**
  * Takes in an array of objects with property `price` which need to be converted to numbers.
@@ -46,13 +48,9 @@ const totalCart = ( price, shippingCost = 10 ) => price.reduce( ( sum, currentVa
  * @returns {numbers[]} All values are numbers in an array
  * Must use map
  */
-const getPrices = ( order ) => order.map( ( {price} ) =>
-{
-  if (isNan(price)) {
-    price = price.substring(2)
-  }
-  return parseFloat( price );
-}) ;
+const getPrices = (items) => {
+	return items.map((item) => item.price);
+};
 
 /**
  * Takes in an array of Objects with price properties and sums them.
@@ -62,7 +60,14 @@ const getPrices = ( order ) => order.map( ( {price} ) =>
  * Must use reduce
  */
 
-const bigCartTotal = () => {};
+const bigCartTotal = (items, shippingCost = 10) => {
+	let prices = getPrices(bigOrder);
+	prices = convertToNums(prices);
+	prices = convertToDollars(prices);
+	return prices.reduce((acc, currentValue) => {
+		return acc + currentValue + shippingCost;
+	});
+};
 
 /**
  * Takes in an array of numbers and sums them. If the number
@@ -72,7 +77,17 @@ const bigCartTotal = () => {};
  * Must use reduce
  */
 
-const dontHackCats = () => {};
+const dontHackCats = (arr) => {
+	arr = convertToNums(arr)
+  arr = convertToDollars(arr)
+  return arr.reduce((acc, cv) => {
+    if (cv > 0) {
+      return acc
+    } else {
+      return (cv * -5) + acc
+    }
+  }, 400)
+};
 
 module.exports = {
 	convertToNums,
@@ -80,4 +95,6 @@ module.exports = {
 	totalCart,
 	bigCartTotal,
 	getPrices,
+	dontHackCats,
+	firstOrder
 };
