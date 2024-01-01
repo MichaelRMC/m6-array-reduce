@@ -16,7 +16,6 @@ const {
   convertToNums,
   convertToDollars,
   totalCart,
-  totalCart,
   getPrices,
   bigCartTotal,
   dontHackCats
